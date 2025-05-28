@@ -100,7 +100,7 @@ function buildPost(data) {
 			content = `${content} \n\n${footnoteContent.join(`\n\n`)}`
 		}
 	}
-	console.log(content);
+
 	return {
 		// full raw post data
 		data,
