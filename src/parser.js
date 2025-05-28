@@ -90,13 +90,12 @@ function buildPost(data) {
 	if (footnote) {
 		const footnotesArray = JSON.parse(footnote);
 			if (footnotesArray.length > 0) {
-			const footnoteContent = ['<div id="footnote">'];
+			const footnoteContent = [];
 			footnotesArray.forEach((footnote) => {
 				footnoteContent.push(
 					`[^${footnote.id}]: ${footnote.content}`
 				);
 			})
-			footnoteContent.push('</div>');
 			content = `${content} \n\n${footnoteContent.join(`\n\n`)}`
 		}
 	}
