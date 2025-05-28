@@ -87,9 +87,9 @@ function collectPosts(allPostData, postTypes) {
 function buildPost(data) {
 	let content = translator.getPostContent(data.childValue('encoded'));
 	const footnote = getPostMetaValue(data, 'footnotes');
-	if (footnote) {
+	if (footnote && typeof footnote === 'string' && footnote.trim().length > 0) {
 		const footnotesArray = JSON.parse(footnote);
-			if (footnotesArray.length > 0) {
+		if (footnotesArray.length > 0) {
 			const footnoteContent = [];
 			footnotesArray.forEach((footnote) => {
 				footnoteContent.push(
