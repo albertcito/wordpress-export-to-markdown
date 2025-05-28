@@ -85,12 +85,28 @@ function collectPosts(allPostData, postTypes) {
 }
 
 function buildPost(data) {
+	let content = translator.getPostContent(data.childValue('encoded'));
+	const footnote = getPostMetaValue(data, 'footnotes');
+	if (footnote) {
+		const footnotesArray = JSON.parse(footnote);
+			if (footnotesArray.length > 0) {
+			const footnoteContent = ['<div id="footnote">'];
+			footnotesArray.forEach((footnote) => {
+				footnoteContent.push(
+					`[^${footnote.id}]: ${footnote.content}`
+				);
+			})
+			footnoteContent.push('</div>');
+			content = `${content} \n\n${footnoteContent.join(`\n\n`)}`
+		}
+	}
+	console.log(content);
 	return {
 		// full raw post data
 		data,
 
 		// body content converted to markdown
-		content: translator.getPostContent(data.childValue('encoded')),
+		content,
 
 		// particularly useful values for all sorts of things
 		type: data.childValue('post_type'),
@@ -139,7 +155,7 @@ function collectScrapedImages(allPostData, postTypes) {
 	postTypes.forEach((postType) => {
 		getItemsOfType(allPostData, postType).forEach((postData) => {
 			const postId = postData.childValue('post_id');
-			
+
 			const postContent = postData.childValue('encoded');
 			const scrapedUrls = [...postContent.matchAll(/<img(?=\s)[^>]+?(?<=\s)src="(.+?)"[^>]*>/gi)].map((match) => match[1]);
 			scrapedUrls.forEach((scrapedUrl) => {
