@@ -94,7 +94,7 @@ function getFootnotes(data) {
 		const footnoteContent = [];
 		footnotesArray.forEach((footnote) => {
 			footnoteContent.push(
-				`[^${footnote.id}]: ${footnote.content}`
+				`[^${footnote.id}]: ${ translator.getPostContent(footnote.content)}`
 			);
 		})
 		return `\n\n${footnoteContent.join(`\n\n`)}`
