@@ -84,21 +84,27 @@ function collectPosts(allPostData, postTypes) {
 	return allPosts;
 }
 
-function buildPost(data) {
-	let content = translator.getPostContent(data.childValue('encoded'));
+function getFootnotes(data) {
 	const footnote = getPostMetaValue(data, 'footnotes');
 	if (footnote && typeof footnote === 'string' && footnote.trim().length > 0) {
 		const footnotesArray = JSON.parse(footnote);
-		if (footnotesArray.length > 0) {
-			const footnoteContent = [];
-			footnotesArray.forEach((footnote) => {
-				footnoteContent.push(
-					`[^${footnote.id}]: ${footnote.content}`
-				);
-			})
-			content = `${content} \n\n${footnoteContent.join(`\n\n`)}`
+		if (footnotesArray.length === 0) {
+			return ''
 		}
+		const footnoteContent = [];
+		footnotesArray.forEach((footnote) => {
+			footnoteContent.push(
+				`[^${footnote.id}]: ${footnote.content}`
+			);
+		})
+		return `\n\n${footnoteContent.join(`\n\n`)}`
 	}
+	return '';
+}
+
+function buildPost(data) {
+	let content = translator.getPostContent(data.childValue('encoded'));
+	content = `${content} ${getFootnotes(data)}`;
 
 	return {
 		// full raw post data
